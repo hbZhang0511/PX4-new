@@ -1,0 +1,8 @@
+/home/zhb/PX4-new/PX4-Autopilot/build/px4_sitl_default/src/modules/uxrce_dds_client/src/libmicroxrceddsclient_project-build/temp_install/microcdr-2.0.0/lib/libmicrocdr.a
+/home/zhb/PX4-new/PX4-Autopilot/build/px4_sitl_default/src/modules/uxrce_dds_client/src/libmicroxrceddsclient_project-build/temp_install/microcdr-2.0.0/include/ucdr/visibility.h
+/home/zhb/PX4-new/PX4-Autopilot/build/px4_sitl_default/src/modules/uxrce_dds_client/src/libmicroxrceddsclient_project-build/temp_install/microcdr-2.0.0/include/ucdr/microcdr.h
+/home/zhb/PX4-new/PX4-Autopilot/build/px4_sitl_default/src/modules/uxrce_dds_client/src/libmicroxrceddsclient_project-build/temp_install/microcdr-2.0.0/include/ucdr/config.h
+/home/zhb/PX4-new/PX4-Autopilot/build/px4_sitl_default/src/modules/uxrce_dds_client/src/libmicroxrceddsclient_project-build/temp_install/microcdr-2.0.0/share/microcdr/cmake/microcdrTargets.cmake
+/home/zhb/PX4-new/PX4-Autopilot/build/px4_sitl_default/src/modules/uxrce_dds_client/src/libmicroxrceddsclient_project-build/temp_install/microcdr-2.0.0/share/microcdr/cmake/microcdrTargets-relwithdebinfo.cmake
+/home/zhb/PX4-new/PX4-Autopilot/build/px4_sitl_default/src/modules/uxrce_dds_client/src/libmicroxrceddsclient_project-build/temp_install/microcdr-2.0.0/share/microcdr/cmake/microcdrConfig.cmake
+/home/zhb/PX4-new/PX4-Autopilot/build/px4_sitl_default/src/modules/uxrce_dds_client/src/libmicroxrceddsclient_project-build/temp_install/microcdr-2.0.0/share/microcdr/cmake/microcdrConfigVersion.cmake

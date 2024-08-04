@@ -1,0 +1,13 @@
+# Target labels
+ libmicroxrceddsclient_project
+# Source files and their labels
+/home/zhb/PX4-new/PX4-Autopilot/build/px4_sitl_default/src/modules/uxrce_dds_client/CMakeFiles/libmicroxrceddsclient_project
+/home/zhb/PX4-new/PX4-Autopilot/build/px4_sitl_default/src/modules/uxrce_dds_client/CMakeFiles/libmicroxrceddsclient_project.rule
+/home/zhb/PX4-new/PX4-Autopilot/build/px4_sitl_default/src/modules/uxrce_dds_client/CMakeFiles/libmicroxrceddsclient_project-complete.rule
+/home/zhb/PX4-new/PX4-Autopilot/build/px4_sitl_default/src/modules/uxrce_dds_client/src/libmicroxrceddsclient_project-stamp/libmicroxrceddsclient_project-install.rule
+/home/zhb/PX4-new/PX4-Autopilot/build/px4_sitl_default/src/modules/uxrce_dds_client/src/libmicroxrceddsclient_project-stamp/libmicroxrceddsclient_project-mkdir.rule
+/home/zhb/PX4-new/PX4-Autopilot/build/px4_sitl_default/src/modules/uxrce_dds_client/src/libmicroxrceddsclient_project-stamp/libmicroxrceddsclient_project-download.rule
+/home/zhb/PX4-new/PX4-Autopilot/build/px4_sitl_default/src/modules/uxrce_dds_client/src/libmicroxrceddsclient_project-stamp/libmicroxrceddsclient_project-update.rule
+/home/zhb/PX4-new/PX4-Autopilot/build/px4_sitl_default/src/modules/uxrce_dds_client/src/libmicroxrceddsclient_project-stamp/libmicroxrceddsclient_project-patch.rule
+/home/zhb/PX4-new/PX4-Autopilot/build/px4_sitl_default/src/modules/uxrce_dds_client/src/libmicroxrceddsclient_project-stamp/libmicroxrceddsclient_project-configure.rule
+/home/zhb/PX4-new/PX4-Autopilot/build/px4_sitl_default/src/modules/uxrce_dds_client/src/libmicroxrceddsclient_project-stamp/libmicroxrceddsclient_project-build.rule
