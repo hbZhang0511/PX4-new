@@ -1,13 +1,13 @@
 Performing C SOURCE FILE Test CMAKE_HAVE_LIBC_PTHREAD failed with the following output:
 Change Dir: /home/zhb/PX4-new/PX4-Autopilot/build/px4_sitl_default/src/modules/uxrce_dds_client/src/libmicroxrceddsclient_project-build/CMakeFiles/CMakeTmp
 
-Run Build Command(s):/usr/bin/ninja cmTC_910d7 && [1/2] Building C object CMakeFiles/cmTC_910d7.dir/src.c.o
-[2/2] Linking C executable cmTC_910d7
-FAILED: cmTC_910d7 
-: && /usr/bin/cc -I/home/zhb/PX4-new/PX4-Autopilot/boards/px4/sitl/src -I/home/zhb/PX4-new/PX4-Autopilot/platforms/posix/src/px4/common/include -I/home/zhb/PX4-new/PX4-Autopilot/build/px4_sitl_default -I/home/zhb/PX4-new/PX4-Autopilot/build/px4_sitl_default/src/lib -I/home/zhb/PX4-new/PX4-Autopilot/platforms/posix/src/px4/generic/generic/include -I/home/zhb/PX4-new/PX4-Autopilot/platforms/posix/src/px4/common/include -I/home/zhb/PX4-new/PX4-Autopilot/platforms/common -I/home/zhb/PX4-new/PX4-Autopilot/platforms/common/include -I/home/zhb/PX4-new/PX4-Autopilot/src -I/home/zhb/PX4-new/PX4-Autopilot/src/include -I/home/zhb/PX4-new/PX4-Autopilot/src/lib -I/home/zhb/PX4-new/PX4-Autopilot/src/lib/matrix -I/home/zhb/PX4-new/PX4-Autopilot/src/modules -I/home/zhb/PX4-new/PX4-Autopilot/platforms/posix/include -I/home/zhb/PX4-new/PX4-Autopilot/build/px4_sitl_default/external/Install/include -DCMAKE_HAVE_LIBC_PTHREAD  -fuse-ld=gold CMakeFiles/cmTC_910d7.dir/src.c.o  -o cmTC_910d7   && :
-CMakeFiles/cmTC_910d7.dir/src.c.o:src.c:function main: 错误: 对‘pthread_create’未定义的引用
-CMakeFiles/cmTC_910d7.dir/src.c.o:src.c:function main: 错误: 对‘pthread_detach’未定义的引用
-CMakeFiles/cmTC_910d7.dir/src.c.o:src.c:function main: 错误: 对‘pthread_join’未定义的引用
+Run Build Command(s):/usr/bin/ninja cmTC_9bd47 && [1/2] Building C object CMakeFiles/cmTC_9bd47.dir/src.c.o
+[2/2] Linking C executable cmTC_9bd47
+FAILED: cmTC_9bd47 
+: && /usr/bin/cc -I/home/zhb/PX4-new/PX4-Autopilot/boards/px4/sitl/src -I/home/zhb/PX4-new/PX4-Autopilot/platforms/posix/src/px4/common/include -I/home/zhb/PX4-new/PX4-Autopilot/build/px4_sitl_default -I/home/zhb/PX4-new/PX4-Autopilot/build/px4_sitl_default/src/lib -I/home/zhb/PX4-new/PX4-Autopilot/platforms/posix/src/px4/generic/generic/include -I/home/zhb/PX4-new/PX4-Autopilot/platforms/posix/src/px4/common/include -I/home/zhb/PX4-new/PX4-Autopilot/platforms/common -I/home/zhb/PX4-new/PX4-Autopilot/platforms/common/include -I/home/zhb/PX4-new/PX4-Autopilot/src -I/home/zhb/PX4-new/PX4-Autopilot/src/include -I/home/zhb/PX4-new/PX4-Autopilot/src/lib -I/home/zhb/PX4-new/PX4-Autopilot/src/lib/matrix -I/home/zhb/PX4-new/PX4-Autopilot/src/modules -I/home/zhb/PX4-new/PX4-Autopilot/platforms/posix/include -I/home/zhb/PX4-new/PX4-Autopilot/build/px4_sitl_default/external/Install/include -DCMAKE_HAVE_LIBC_PTHREAD  -fuse-ld=gold CMakeFiles/cmTC_9bd47.dir/src.c.o  -o cmTC_9bd47   && :
+CMakeFiles/cmTC_9bd47.dir/src.c.o:src.c:function main: 错误: 对‘pthread_create’未定义的引用
+CMakeFiles/cmTC_9bd47.dir/src.c.o:src.c:function main: 错误: 对‘pthread_detach’未定义的引用
+CMakeFiles/cmTC_9bd47.dir/src.c.o:src.c:function main: 错误: 对‘pthread_join’未定义的引用
 collect2: error: ld returned 1 exit status
 ninja: build stopped: subcommand failed.
 
@@ -35,12 +35,12 @@ int main(void)
 Determining if the function pthread_create exists in the pthreads failed with the following output:
 Change Dir: /home/zhb/PX4-new/PX4-Autopilot/build/px4_sitl_default/src/modules/uxrce_dds_client/src/libmicroxrceddsclient_project-build/CMakeFiles/CMakeTmp
 
-Run Build Command(s):/usr/bin/ninja cmTC_f5a63 && [1/2] Building C object CMakeFiles/cmTC_f5a63.dir/CheckFunctionExists.c.o
-[2/2] Linking C executable cmTC_f5a63
-FAILED: cmTC_f5a63 
-: && /usr/bin/cc -I/home/zhb/PX4-new/PX4-Autopilot/boards/px4/sitl/src -I/home/zhb/PX4-new/PX4-Autopilot/platforms/posix/src/px4/common/include -I/home/zhb/PX4-new/PX4-Autopilot/build/px4_sitl_default -I/home/zhb/PX4-new/PX4-Autopilot/build/px4_sitl_default/src/lib -I/home/zhb/PX4-new/PX4-Autopilot/platforms/posix/src/px4/generic/generic/include -I/home/zhb/PX4-new/PX4-Autopilot/platforms/posix/src/px4/common/include -I/home/zhb/PX4-new/PX4-Autopilot/platforms/common -I/home/zhb/PX4-new/PX4-Autopilot/platforms/common/include -I/home/zhb/PX4-new/PX4-Autopilot/src -I/home/zhb/PX4-new/PX4-Autopilot/src/include -I/home/zhb/PX4-new/PX4-Autopilot/src/lib -I/home/zhb/PX4-new/PX4-Autopilot/src/lib/matrix -I/home/zhb/PX4-new/PX4-Autopilot/src/modules -I/home/zhb/PX4-new/PX4-Autopilot/platforms/posix/include -I/home/zhb/PX4-new/PX4-Autopilot/build/px4_sitl_default/external/Install/include -DCHECK_FUNCTION_EXISTS=pthread_create  -fuse-ld=gold CMakeFiles/cmTC_f5a63.dir/CheckFunctionExists.c.o  -o cmTC_f5a63  -lpthreads && :
+Run Build Command(s):/usr/bin/ninja cmTC_9cbf4 && [1/2] Building C object CMakeFiles/cmTC_9cbf4.dir/CheckFunctionExists.c.o
+[2/2] Linking C executable cmTC_9cbf4
+FAILED: cmTC_9cbf4 
+: && /usr/bin/cc -I/home/zhb/PX4-new/PX4-Autopilot/boards/px4/sitl/src -I/home/zhb/PX4-new/PX4-Autopilot/platforms/posix/src/px4/common/include -I/home/zhb/PX4-new/PX4-Autopilot/build/px4_sitl_default -I/home/zhb/PX4-new/PX4-Autopilot/build/px4_sitl_default/src/lib -I/home/zhb/PX4-new/PX4-Autopilot/platforms/posix/src/px4/generic/generic/include -I/home/zhb/PX4-new/PX4-Autopilot/platforms/posix/src/px4/common/include -I/home/zhb/PX4-new/PX4-Autopilot/platforms/common -I/home/zhb/PX4-new/PX4-Autopilot/platforms/common/include -I/home/zhb/PX4-new/PX4-Autopilot/src -I/home/zhb/PX4-new/PX4-Autopilot/src/include -I/home/zhb/PX4-new/PX4-Autopilot/src/lib -I/home/zhb/PX4-new/PX4-Autopilot/src/lib/matrix -I/home/zhb/PX4-new/PX4-Autopilot/src/modules -I/home/zhb/PX4-new/PX4-Autopilot/platforms/posix/include -I/home/zhb/PX4-new/PX4-Autopilot/build/px4_sitl_default/external/Install/include -DCHECK_FUNCTION_EXISTS=pthread_create  -fuse-ld=gold CMakeFiles/cmTC_9cbf4.dir/CheckFunctionExists.c.o  -o cmTC_9cbf4  -lpthreads && :
 /usr/bin/ld.gold：错误： cannot find -lpthreads
-CMakeFiles/cmTC_f5a63.dir/CheckFunctionExists.c.o:CheckFunctionExists.c:function main: 错误: 对‘pthread_create’未定义的引用
+CMakeFiles/cmTC_9cbf4.dir/CheckFunctionExists.c.o:CheckFunctionExists.c:function main: 错误: 对‘pthread_create’未定义的引用
 collect2: error: ld returned 1 exit status
 ninja: build stopped: subcommand failed.
 

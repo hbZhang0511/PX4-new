@@ -42,8 +42,8 @@ loading initial cache file /home/zhb/PX4-new/PX4-Autopilot/build/px4_sitl_defaul
 [6/16] Performing build step for 'microcdr'
 [1/8] Creating directories for 'ucdr'
 [2/8] No download step for 'ucdr'
-[3/8] No update step for 'ucdr'
-[4/8] No patch step for 'ucdr'
+[3/8] No patch step for 'ucdr'
+[4/8] No update step for 'ucdr'
 [5/8] Performing configure step for 'ucdr'
 loading initial cache file /home/zhb/PX4-new/PX4-Autopilot/build/px4_sitl_default/src/modules/uxrce_dds_client/src/libmicroxrceddsclient_project-build/microcdr/src/microcdr-build/ucdr-prefix/tmp/ucdr-cache-RelWithDebInfo.cmake
 -- Configuring done
@@ -52,8 +52,8 @@ loading initial cache file /home/zhb/PX4-new/PX4-Autopilot/build/px4_sitl_defaul
 [6/8] Performing build step for 'ucdr'
 [1/6] Building C object CMakeFiles/microcdr.dir/src/c/types/string.c.o
 [2/6] Building C object CMakeFiles/microcdr.dir/src/c/common.c.o
-[3/6] Building C object CMakeFiles/microcdr.dir/src/c/types/array.c.o
-[4/6] Building C object CMakeFiles/microcdr.dir/src/c/types/sequence.c.o
+[3/6] Building C object CMakeFiles/microcdr.dir/src/c/types/sequence.c.o
+[4/6] Building C object CMakeFiles/microcdr.dir/src/c/types/array.c.o
 [5/6] Building C object CMakeFiles/microcdr.dir/src/c/types/basic.c.o
 [6/6] Linking C static library libmicrocdr.a
 [7/8] No install step for 'ucdr'
@@ -91,30 +91,30 @@ loading initial cache file /home/zhb/PX4-new/PX4-Autopilot/build/px4_sitl_defaul
 -- Build files have been written to: /home/zhb/PX4-new/PX4-Autopilot/build/px4_sitl_default/src/modules/uxrce_dds_client/src/libmicroxrceddsclient_project-build
 [14/16] Performing build step for 'uclient'
 [1/29] Building C object CMakeFiles/microxrcedds_client.dir/src/c/core/session/stream/input_best_effort_stream.c.o
-[2/29] Building C object CMakeFiles/microxrcedds_client.dir/src/c/core/session/stream/output_best_effort_stream.c.o
-[3/29] Building C object CMakeFiles/microxrcedds_client.dir/src/c/core/serialization/xrce_header.c.o
-[4/29] Building C object CMakeFiles/microxrcedds_client.dir/src/c/core/session/stream/stream_id.c.o
+[2/29] Building C object CMakeFiles/microxrcedds_client.dir/src/c/core/session/stream/stream_id.c.o
+[3/29] Building C object CMakeFiles/microxrcedds_client.dir/src/c/core/session/object_id.c.o
+[4/29] Building C object CMakeFiles/microxrcedds_client.dir/src/c/core/session/stream/output_best_effort_stream.c.o
 [5/29] Building C object CMakeFiles/microxrcedds_client.dir/src/c/core/session/stream/seq_num.c.o
-[6/29] Building C object CMakeFiles/microxrcedds_client.dir/src/c/core/session/object_id.c.o
-[7/29] Building C object CMakeFiles/microxrcedds_client.dir/src/c/core/serialization/xrce_subheader.c.o
-[8/29] Building C object CMakeFiles/microxrcedds_client.dir/src/c/core/session/submessage.c.o
-[9/29] Building C object CMakeFiles/microxrcedds_client.dir/src/c/util/time.c.o
-[10/29] Building C object CMakeFiles/microxrcedds_client.dir/src/c/core/session/stream/stream_storage.c.o
+[6/29] Building C object CMakeFiles/microxrcedds_client.dir/src/c/core/serialization/xrce_subheader.c.o
+[7/29] Building C object CMakeFiles/microxrcedds_client.dir/src/c/core/session/submessage.c.o
+[8/29] Building C object CMakeFiles/microxrcedds_client.dir/src/c/core/serialization/xrce_header.c.o
+[9/29] Building C object CMakeFiles/microxrcedds_client.dir/src/c/core/session/stream/stream_storage.c.o
+[10/29] Building C object CMakeFiles/microxrcedds_client.dir/src/c/util/time.c.o
 [11/29] Building C object CMakeFiles/microxrcedds_client.dir/src/c/core/session/common_create_entities.c.o
-[12/29] Building C object CMakeFiles/microxrcedds_client.dir/src/c/core/session/session_info.c.o
+[12/29] Building C object CMakeFiles/microxrcedds_client.dir/src/c/util/ping.c.o
 [13/29] Building C object CMakeFiles/microxrcedds_client.dir/src/c/core/session/create_entities_xml.c.o
 [14/29] Building C object CMakeFiles/microxrcedds_client.dir/src/c/core/session/read_access.c.o
-[15/29] Building C object CMakeFiles/microxrcedds_client.dir/src/c/core/session/stream/input_reliable_stream.c.o
-[16/29] Building C object CMakeFiles/microxrcedds_client.dir/src/c/util/ping.c.o
+[15/29] Building C object CMakeFiles/microxrcedds_client.dir/src/c/core/session/session_info.c.o
+[16/29] Building C object CMakeFiles/microxrcedds_client.dir/src/c/core/session/create_entities_bin.c.o
 [17/29] Building C object CMakeFiles/microxrcedds_client.dir/src/c/core/session/create_entities_ref.c.o
-[18/29] Building C object CMakeFiles/microxrcedds_client.dir/src/c/profile/transport/ip/udp/udp_transport.c.o
-[19/29] Building C object CMakeFiles/microxrcedds_client.dir/src/c/profile/transport/ip/ip_posix.c.o
-[20/29] Building C object CMakeFiles/microxrcedds_client.dir/src/c/profile/transport/ip/udp/udp_transport_posix.c.o
+[18/29] Building C object CMakeFiles/microxrcedds_client.dir/src/c/core/session/stream/input_reliable_stream.c.o
+[19/29] Building C object CMakeFiles/microxrcedds_client.dir/src/c/profile/transport/serial/serial_transport_posix.c.o
+[20/29] Building C object CMakeFiles/microxrcedds_client.dir/src/c/profile/transport/ip/udp/udp_transport.c.o
 [21/29] Building C object CMakeFiles/microxrcedds_client.dir/src/c/profile/transport/serial/serial_transport.c.o
-[22/29] Building C object CMakeFiles/microxrcedds_client.dir/src/c/core/session/write_access.c.o
-[23/29] Building C object CMakeFiles/microxrcedds_client.dir/src/c/core/session/stream/output_reliable_stream.c.o
-[24/29] Building C object CMakeFiles/microxrcedds_client.dir/src/c/profile/transport/serial/serial_transport_posix.c.o
-[25/29] Building C object CMakeFiles/microxrcedds_client.dir/src/c/core/session/create_entities_bin.c.o
+[22/29] Building C object CMakeFiles/microxrcedds_client.dir/src/c/profile/transport/ip/ip_posix.c.o
+[23/29] Building C object CMakeFiles/microxrcedds_client.dir/src/c/core/session/write_access.c.o
+[24/29] Building C object CMakeFiles/microxrcedds_client.dir/src/c/profile/transport/ip/udp/udp_transport_posix.c.o
+[25/29] Building C object CMakeFiles/microxrcedds_client.dir/src/c/core/session/stream/output_reliable_stream.c.o
 [26/29] Building C object CMakeFiles/microxrcedds_client.dir/src/c/profile/transport/stream_framing/stream_framing_protocol.c.o
 [27/29] Building C object CMakeFiles/microxrcedds_client.dir/src/c/core/session/session.c.o
 [28/29] Building C object CMakeFiles/microxrcedds_client.dir/src/c/core/serialization/xrce_types.c.o

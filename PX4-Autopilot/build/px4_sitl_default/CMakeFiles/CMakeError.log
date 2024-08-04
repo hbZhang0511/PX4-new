@@ -1,13 +1,13 @@
 Performing C SOURCE FILE Test CMAKE_HAVE_LIBC_PTHREAD failed with the following output:
 Change Dir: /home/zhb/PX4-new/PX4-Autopilot/build/px4_sitl_default/CMakeFiles/CMakeTmp
 
-Run Build Command(s):/usr/bin/ninja cmTC_359b7 && [1/2] Building C object CMakeFiles/cmTC_359b7.dir/src.c.o
-[2/2] Linking C executable cmTC_359b7
-FAILED: cmTC_359b7 
-: && /usr/bin/cc -DCMAKE_HAVE_LIBC_PTHREAD  -fuse-ld=gold   -Wl,--export-dynamic -rdynamic CMakeFiles/cmTC_359b7.dir/src.c.o  -o cmTC_359b7   && :
-CMakeFiles/cmTC_359b7.dir/src.c.o:src.c:function main: 错误: 对‘pthread_create’未定义的引用
-CMakeFiles/cmTC_359b7.dir/src.c.o:src.c:function main: 错误: 对‘pthread_detach’未定义的引用
-CMakeFiles/cmTC_359b7.dir/src.c.o:src.c:function main: 错误: 对‘pthread_join’未定义的引用
+Run Build Command(s):/usr/bin/ninja cmTC_a3c72 && [1/2] Building C object CMakeFiles/cmTC_a3c72.dir/src.c.o
+[2/2] Linking C executable cmTC_a3c72
+FAILED: cmTC_a3c72 
+: && /usr/bin/cc -DCMAKE_HAVE_LIBC_PTHREAD  -fuse-ld=gold   -Wl,--export-dynamic -rdynamic CMakeFiles/cmTC_a3c72.dir/src.c.o  -o cmTC_a3c72   && :
+CMakeFiles/cmTC_a3c72.dir/src.c.o:src.c:function main: 错误: 对‘pthread_create’未定义的引用
+CMakeFiles/cmTC_a3c72.dir/src.c.o:src.c:function main: 错误: 对‘pthread_detach’未定义的引用
+CMakeFiles/cmTC_a3c72.dir/src.c.o:src.c:function main: 错误: 对‘pthread_join’未定义的引用
 collect2: error: ld returned 1 exit status
 ninja: build stopped: subcommand failed.
 
@@ -35,12 +35,12 @@ int main(void)
 Determining if the function pthread_create exists in the pthreads failed with the following output:
 Change Dir: /home/zhb/PX4-new/PX4-Autopilot/build/px4_sitl_default/CMakeFiles/CMakeTmp
 
-Run Build Command(s):/usr/bin/ninja cmTC_8b04a && [1/2] Building C object CMakeFiles/cmTC_8b04a.dir/CheckFunctionExists.c.o
-[2/2] Linking C executable cmTC_8b04a
-FAILED: cmTC_8b04a 
-: && /usr/bin/cc -DCHECK_FUNCTION_EXISTS=pthread_create  -fuse-ld=gold   -Wl,--export-dynamic -rdynamic CMakeFiles/cmTC_8b04a.dir/CheckFunctionExists.c.o  -o cmTC_8b04a  -lpthreads && :
+Run Build Command(s):/usr/bin/ninja cmTC_3392e && [1/2] Building C object CMakeFiles/cmTC_3392e.dir/CheckFunctionExists.c.o
+[2/2] Linking C executable cmTC_3392e
+FAILED: cmTC_3392e 
+: && /usr/bin/cc -DCHECK_FUNCTION_EXISTS=pthread_create  -fuse-ld=gold   -Wl,--export-dynamic -rdynamic CMakeFiles/cmTC_3392e.dir/CheckFunctionExists.c.o  -o cmTC_3392e  -lpthreads && :
 /usr/bin/ld.gold：错误： cannot find -lpthreads
-CMakeFiles/cmTC_8b04a.dir/CheckFunctionExists.c.o:CheckFunctionExists.c:function main: 错误: 对‘pthread_create’未定义的引用
+CMakeFiles/cmTC_3392e.dir/CheckFunctionExists.c.o:CheckFunctionExists.c:function main: 错误: 对‘pthread_create’未定义的引用
 collect2: error: ld returned 1 exit status
 ninja: build stopped: subcommand failed.
 
