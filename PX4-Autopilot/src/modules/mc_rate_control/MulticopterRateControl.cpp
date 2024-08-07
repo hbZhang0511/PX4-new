@@ -50,7 +50,7 @@ MulticopterRateControl::MulticopterRateControl(bool vtol) :
 	_vehicle_thrust_setpoint_pub(vtol ? ORB_ID(vehicle_thrust_setpoint_virtual_mc) : ORB_ID(vehicle_thrust_setpoint)),
 	_loop_perf(perf_alloc(PC_ELAPSED, MODULE_NAME": cycle"))
 {
-	_vehicle_status.vehicle_type = vehicle_status_s::VEHICLE_TYPE_ROTARY_WING;
+	_vehicle_status.vehicle_type = vehicle_status_s::VEHICLE_TYPE_ROTARY_WING; //设置飞行器类型为旋翼
 
 	parameters_updated();
 	_controller_status_pub.advertise();
@@ -61,8 +61,9 @@ MulticopterRateControl::~MulticopterRateControl()
 	perf_free(_loop_perf);
 }
 
+//回调函数 传感器数据更新时触发控制器运行
 bool
-MulticopterRateControl::init()
+MulticopterRateControl::init()  
 {
 	if (!_vehicle_angular_velocity_sub.registerCallback()) {
 		PX4_ERR("callback registration failed");
@@ -73,13 +74,14 @@ MulticopterRateControl::init()
 }
 
 void
-MulticopterRateControl::parameters_updated()
+MulticopterRateControl::parameters_updated()  //参数更新 读取并应用参数设置 例如pid控制器增益
 {
 	// rate control parameters
 	// The controller gain K is used to convert the parallel (P + I/s + sD) form
 	// to the ideal (K * [1 + 1/sTi + sTd]) form
 	const Vector3f rate_k = Vector3f(_param_mc_rollrate_k.get(), _param_mc_pitchrate_k.get(), _param_mc_yawrate_k.get());
-
+	
+	//setgains用于设置pid的增益
 	_rate_control.setGains(
 		rate_k.emult(Vector3f(_param_mc_rollrate_p.get(), _param_mc_pitchrate_p.get(), _param_mc_yawrate_p.get())),
 		rate_k.emult(Vector3f(_param_mc_rollrate_i.get(), _param_mc_pitchrate_i.get(), _param_mc_yawrate_i.get())),
@@ -90,13 +92,14 @@ MulticopterRateControl::parameters_updated()
 
 	_rate_control.setFeedForwardGain(
 		Vector3f(_param_mc_rollrate_ff.get(), _param_mc_pitchrate_ff.get(), _param_mc_yawrate_ff.get()));
-
+	//前馈增益
 
 	// manual rate control acro mode rate limits
 	_acro_rate_max = Vector3f(radians(_param_mc_acro_r_max.get()), radians(_param_mc_acro_p_max.get()),
 				  radians(_param_mc_acro_y_max.get()));
 }
 
+//运行过程中持续调用 接收到新的角速度传感器数据时会被触发执行
 void
 MulticopterRateControl::Run()
 {
@@ -118,7 +121,7 @@ MulticopterRateControl::Run()
 		parameters_updated();
 	}
 
-	/* run controller on gyro changes */
+	/* run controller on gyro changes 从传感器更新角速度数据*/
 	vehicle_angular_velocity_s angular_velocity;
 
 	if (_vehicle_angular_velocity_sub.update(&angular_velocity)) {
@@ -131,6 +134,9 @@ MulticopterRateControl::Run()
 
 		const Vector3f rates{angular_velocity.xyz};
 		const Vector3f angular_accel{angular_velocity.xyz_derivative};
+
+		// 输出实际的角速度
+        //PX4_INFO("Actual rates: Roll: %.3f, Pitch: %.3f, Yaw: %.3f", (double)rates(0), (double)rates(1), (double)rates(2));
 
 		/* check for updates in other topics */
 		_vehicle_control_mode_sub.update(&_vehicle_control_mode);
@@ -164,6 +170,9 @@ MulticopterRateControl::Run()
 				_thrust_setpoint(2) = -(manual_control_setpoint.throttle + 1.f) * .5f;
 				_thrust_setpoint(0) = _thrust_setpoint(1) = 0.f;
 
+ 				// 输出期望的角速度设定值
+                //PX4_INFO("Desired rates: Roll: %.3f, Pitch: %.3f, Yaw: %.3f", (double)_rates_setpoint(0), (double)_rates_setpoint(1), (double)_rates_setpoint(2));
+				
 				// publish rate setpoint
 				vehicle_rates_setpoint.roll = _rates_setpoint(0);
 				vehicle_rates_setpoint.pitch = _rates_setpoint(1);
@@ -213,9 +222,12 @@ MulticopterRateControl::Run()
 				_rate_control.setSaturationStatus(saturation_positive, saturation_negative);
 			}
 
-			// run rate controller
+			// run rate controller 根据当前的角速率和设定的角速率和角加速度计算出电机控制输入
 			const Vector3f att_control = _rate_control.update(rates, _rates_setpoint, angular_accel, dt, _maybe_landed || _landed);
 
+			// 输出控制器输出的力矩
+            //PX4_INFO("Torque output: Roll: %.3f, Pitch: %.3f, Yaw: %.3f", (double)att_control(0), (double)att_control(1), (double)att_control(2));
+			
 			// publish rate controller status
 			rate_ctrl_status_s rate_ctrl_status{};
 			_rate_control.getRateControlStatus(rate_ctrl_status);
@@ -265,6 +277,7 @@ MulticopterRateControl::Run()
 	perf_end(_loop_perf);
 }
 
+//更新控制状态 监控能量
 void MulticopterRateControl::updateActuatorControlsStatus(const vehicle_torque_setpoint_s &vehicle_torque_setpoint,
 		float dt)
 {
@@ -289,6 +302,7 @@ void MulticopterRateControl::updateActuatorControlsStatus(const vehicle_torque_s
 	}
 }
 
+//启动任务器任务
 int MulticopterRateControl::task_spawn(int argc, char *argv[])
 {
 	bool vtol = false;

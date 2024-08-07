@@ -43,8 +43,8 @@ using namespace matrix;
 
 void AttitudeControl::setProportionalGain(const matrix::Vector3f &proportional_gain, const float yaw_weight)
 {
-	_proportional_gain = proportional_gain;
-	_yaw_w = math::constrain(yaw_weight, 0.f, 1.f);
+	_proportional_gain = proportional_gain; //姿态控制的kp
+	_yaw_w = math::constrain(yaw_weight, 0.f, 1.f); //偏航权重 在0-1之间
 
 	// compensate for the effect of the yaw weight rescaling the output
 	if (_yaw_w > 1e-4f) {
@@ -54,7 +54,7 @@ void AttitudeControl::setProportionalGain(const matrix::Vector3f &proportional_g
 
 matrix::Vector3f AttitudeControl::update(const Quatf &q) const
 {
-	Quatf qd = _attitude_setpoint_q;
+	Quatf qd = _attitude_setpoint_q; //期望的姿态四元数
 
 	// calculate reduced desired attitude neglecting vehicle's yaw to prioritize roll and pitch
 	const Vector3f e_z = q.dcm_z();
@@ -81,14 +81,14 @@ matrix::Vector3f AttitudeControl::update(const Quatf &q) const
 	qd = qd_red * Quatf(cosf(_yaw_w * acosf(q_mix(0))), 0, 0, sinf(_yaw_w * asinf(q_mix(3))));
 
 	// quaternion attitude control law, qe is rotation from q to qd
-	const Quatf qe = q.inversed() * qd;
+	const Quatf qe = q.inversed() * qd; //姿态误差
 
 	// using sin(alpha/2) scaled rotation axis as attitude error (see quaternion definition by axis angle)
 	// also taking care of the antipodal unit quaternion ambiguity
-	const Vector3f eq = 2.f * qe.canonical().imag();
+	const Vector3f eq = 2.f * qe.canonical().imag(); //角度误差
 
 	// calculate angular rates setpoint
-	Vector3f rate_setpoint = eq.emult(_proportional_gain);
+	Vector3f rate_setpoint = eq.emult(_proportional_gain); //用eq计算角速度设定值rate_sp
 
 	// Feed forward the yaw setpoint rate.
 	// yawspeed_setpoint is the feed forward commanded rotation around the world z-axis,

@@ -108,6 +108,7 @@ MulticopterAttitudeControl::throttle_curve(float throttle_stick_input)
 	}
 }
 
+//生成姿态角指令
 void
 MulticopterAttitudeControl::generate_attitude_setpoint(const Quatf &q, float dt, bool reset_yaw_sp)
 {
@@ -115,11 +116,12 @@ MulticopterAttitudeControl::generate_attitude_setpoint(const Quatf &q, float dt,
 	const float yaw = Eulerf(q).psi();
 
 	attitude_setpoint.yaw_sp_move_rate = _manual_control_setpoint.yaw * math::radians(_param_mpc_man_y_max.get());
+	//使用手动控制输入和最大偏航速率参数来计算偏航角设定速率
 
 	// Avoid accumulating absolute yaw error with arming stick gesture in case heading_good_for_control stays true
 	if ((_manual_control_setpoint.throttle < -.9f) && (_param_mc_airmode.get() != 2)) {
 		reset_yaw_sp = true;
-	}
+	} 
 
 	// Make sure not absolute heading error builds up
 	if (reset_yaw_sp) {
@@ -128,6 +130,7 @@ MulticopterAttitudeControl::generate_attitude_setpoint(const Quatf &q, float dt,
 	} else {
 		_man_yaw_sp = wrap_pi(_man_yaw_sp + attitude_setpoint.yaw_sp_move_rate * dt);
 	}
+	//如果需要重置偏航设定点，则将手动偏航设定点设置为当前偏航角yaw；else根据偏航角设定角速率来更新手动偏航设定点
 
 	/*
 	 * Input mapping for roll & pitch setpoints
@@ -151,11 +154,13 @@ MulticopterAttitudeControl::generate_attitude_setpoint(const Quatf &q, float dt,
 		v *= _man_tilt_max / v_norm;
 	}
 
+	//计算滚转和俯仰的四元数
 	Quatf q_sp_rp = AxisAnglef(v(0), v(1), 0.f);
 	// The axis angle can change the yaw as well (noticeable at higher tilt angles).
 	// This is the formula by how much the yaw changes:
 	//   let a := tilt angle, b := atan(y/x) (direction of maximum tilt)
 	//   yaw = atan(-2 * sin(b) * cos(b) * sin^2(a/2) / (1 - 2 * cos^2(b) * sin^2(a/2))).
+	//计算偏航的四元数
 	const Quatf q_sp_yaw(cosf(_man_yaw_sp / 2.f), 0.f, 0.f, sinf(_man_yaw_sp / 2.f));
 
 	if (_vtol) {
@@ -168,12 +173,12 @@ MulticopterAttitudeControl::generate_attitude_setpoint(const Quatf &q, float dt,
 	}
 
 	// Align the desired tilt with the yaw setpoint
-	Quatf q_sp = q_sp_yaw * q_sp_rp;
+	Quatf q_sp = q_sp_yaw * q_sp_rp; //最终四元数
 
 	q_sp.copyTo(attitude_setpoint.q_d);
 
 	// Transform to euler angles for logging only
-	const Eulerf euler_sp(q_sp);
+	const Eulerf euler_sp(q_sp); //转换成欧拉角
 	attitude_setpoint.roll_body = euler_sp(0);
 	attitude_setpoint.pitch_body = euler_sp(1);
 	attitude_setpoint.yaw_body = euler_sp(2);
@@ -213,6 +218,7 @@ MulticopterAttitudeControl::Run()
 	// run controller on attitude updates
 	vehicle_attitude_s v_att;
 
+	//姿态更新 从_vehicle_attitude_sub里获取最新的姿态数据
 	if (_vehicle_attitude_sub.update(&v_att)) {
 
 		// Guard against too small (< 0.2ms) and too large (> 20ms) dt's.
@@ -221,7 +227,7 @@ MulticopterAttitudeControl::Run()
 
 		const Quatf q{v_att.q};
 
-		// Check for new attitude setpoint
+		// Check for new attitude setpoint 姿态设定点更新检查
 		if (_vehicle_attitude_setpoint_sub.updated()) {
 			vehicle_attitude_setpoint_s vehicle_attitude_setpoint;
 
@@ -234,7 +240,7 @@ MulticopterAttitudeControl::Run()
 			}
 		}
 
-		// Check for a heading reset
+		// Check for a heading reset 四元数重置检查
 		if (_quat_reset_counter != v_att.quat_reset_counter) {
 			const Quatf delta_q_reset(v_att.delta_q_reset);
 
@@ -249,7 +255,7 @@ MulticopterAttitudeControl::Run()
 			_quat_reset_counter = v_att.quat_reset_counter;
 		}
 
-		/* check for updates in other topics */
+		/* check for updates in other topics 手动控制输入和飞行模式更新*/
 		_manual_control_setpoint_sub.update(&_manual_control_setpoint);
 		_vehicle_control_mode_sub.update(&_vehicle_control_mode);
 
@@ -263,7 +269,7 @@ MulticopterAttitudeControl::Run()
 				_vtol_tailsitter = vehicle_status.is_vtol_tailsitter;
 
 			}
-		}
+		} //更新飞行器状态，包括飞行器类型、是否为 VTOL 飞行器、是否处于过渡模式、以及是否为尾坐飞行器。
 
 		if (_vehicle_local_position_sub.updated()) {
 			vehicle_local_position_s vehicle_local_position;
@@ -283,7 +289,7 @@ MulticopterAttitudeControl::Run()
 		bool run_att_ctrl = _vehicle_control_mode.flag_control_attitude_enabled && (is_hovering || is_tailsitter_transition);
 
 		if (run_att_ctrl) {
-
+			//生成姿态设定点
 			// Generate the attitude setpoint from stick inputs if we are in Manual/Stabilized mode
 			if (_vehicle_control_mode.flag_control_manual_enabled &&
 			    !_vehicle_control_mode.flag_control_altitude_enabled &&

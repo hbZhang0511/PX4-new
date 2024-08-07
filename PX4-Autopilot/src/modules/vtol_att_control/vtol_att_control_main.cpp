@@ -54,16 +54,17 @@
 using namespace matrix;
 using namespace time_literals;
 
+//实现了模式转换，姿态控制，执行器输出
 VtolAttitudeControl::VtolAttitudeControl() :
 	ModuleParams(nullptr),
 	WorkItem(MODULE_NAME, px4::wq_configurations::rate_ctrl),
 	_loop_perf(perf_alloc(PC_ELAPSED, "vtol_att_control: cycle"))
 {
-	// start vtol in rotary wing mode
+	// start vtol in rotary wing mode 初始化为多旋翼模式
 	_vtol_vehicle_status.vehicle_vtol_state = vtol_vehicle_status_s::VEHICLE_VTOL_STATE_MC;
 
 	parameters_update();
-
+	//根据参数决定vtol的类型
 	if (static_cast<vtol_type>(_param_vt_type.get()) == vtol_type::TAILSITTER) {
 		_vtol_type = new Tailsitter(this);
 
@@ -90,7 +91,7 @@ VtolAttitudeControl::~VtolAttitudeControl()
 {
 	perf_free(_loop_perf);
 }
-
+//初始化与回调函数
 bool
 VtolAttitudeControl::init()
 {
@@ -126,7 +127,7 @@ void VtolAttitudeControl::vehicle_status_poll()
 	    && _nav_state_prev != vehicle_status_s::NAVIGATION_STATE_AUTO_RTL && _vtol_type->get_mode() == mode::TRANSITION_TO_FW) {
 		_transition_command = vtol_vehicle_status_s::VEHICLE_VTOL_STATE_MC;
 	}
-
+//检测模式变化
 	_nav_state_prev = _vehicle_status.nav_state;
 }
 

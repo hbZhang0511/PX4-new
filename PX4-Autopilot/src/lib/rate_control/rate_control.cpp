@@ -47,6 +47,7 @@ void RateControl::setGains(const Vector3f &P, const Vector3f &I, const Vector3f 
 	_gain_d = D;
 }
 
+//更新控制分配器的饱和状态
 void RateControl::setSaturationStatus(const Vector3<bool> &saturation_positive,
 				      const Vector3<bool> &saturation_negative)
 {
@@ -116,7 +117,7 @@ void RateControl::updateIntegral(Vector3f &rate_error, const float dt)
 		}
 	}
 }
-
+//提供积分状态
 void RateControl::getRateControlStatus(rate_ctrl_status_s &rate_ctrl_status)
 {
 	rate_ctrl_status.rollspeed_integ = _rate_int(0);
