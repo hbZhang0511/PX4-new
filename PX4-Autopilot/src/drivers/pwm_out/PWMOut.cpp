@@ -38,8 +38,8 @@
 PWMOut::PWMOut() :
 	OutputModuleInterface(MODULE_NAME, px4::wq_configurations::hp_default)
 {
-	_pwm_mask = ((1u << DIRECT_PWM_OUTPUT_CHANNELS) - 1);
-	_mixing_output.setMaxNumOutputs(DIRECT_PWM_OUTPUT_CHANNELS);
+	_pwm_mask = ((1u << DIRECT_PWM_OUTPUT_CHANNELS) - 1);//初始化pwm掩码
+	_mixing_output.setMaxNumOutputs(DIRECT_PWM_OUTPUT_CHANNELS);//设置混控输出的最大通道数
 
 	// Getting initial parameter values
 	update_params();
@@ -54,7 +54,7 @@ PWMOut::~PWMOut()
 	perf_free(_interval_perf);
 }
 
-bool PWMOut::update_pwm_out_state(bool on)
+bool PWMOut::update_pwm_out_state(bool on) //函数更新pwm输出状态
 {
 	if (on && !_pwm_initialized && _pwm_mask != 0) {
 
@@ -126,7 +126,7 @@ bool PWMOut::update_pwm_out_state(bool on)
 }
 
 bool PWMOut::updateOutputs(bool stop_motors, uint16_t outputs[MAX_ACTUATORS],
-			   unsigned num_outputs, unsigned num_control_groups_updated)
+			   unsigned num_outputs, unsigned num_control_groups_updated) //更新pwm输出
 {
 	/* output to the servos */
 	if (_pwm_initialized) {
@@ -141,6 +141,7 @@ bool PWMOut::updateOutputs(bool stop_motors, uint16_t outputs[MAX_ACTUATORS],
 			}
 		}
 	}
+	//如果通道已经启用并且有pwm输出，那么通过up_pwm_servo_set设置pwm值
 
 	/* Trigger all timer's channels in Oneshot mode to fire
 	 * the oneshots with updated values.
@@ -148,7 +149,7 @@ bool PWMOut::updateOutputs(bool stop_motors, uint16_t outputs[MAX_ACTUATORS],
 	if (num_control_groups_updated > 0) {
 		up_pwm_update(_pwm_mask);
 	}
-
+	//如果有控制组更新，调用up_pwm_update触发定时器更新发送新的pwm信号
 	return true;
 }
 

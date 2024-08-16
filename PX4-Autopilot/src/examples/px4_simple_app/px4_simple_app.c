@@ -52,25 +52,25 @@
 #include <uORB/topics/vehicle_acceleration.h>
 #include <uORB/topics/vehicle_attitude.h>
 
-__EXPORT int px4_simple_app_main(int argc, char *argv[]);
+__EXPORT int px4_simple_app_main(int argc, char *argv[]); //应用程序的主入口点，在px4中以任务的形式运行
 
 int px4_simple_app_main(int argc, char *argv[])
 {
 	PX4_INFO("Hello Sky!");
 
 	/* subscribe to vehicle_acceleration topic */
-	int sensor_sub_fd = orb_subscribe(ORB_ID(vehicle_acceleration));
+	int sensor_sub_fd = orb_subscribe(ORB_ID(vehicle_acceleration)); //通过orb_subscribe函数订阅vehicle_acceleration主题 包含加速度数据
 	/* limit the update rate to 5 Hz */
-	orb_set_interval(sensor_sub_fd, 200);
+	orb_set_interval(sensor_sub_fd, 200);//200ms更新一次
 
 	/* advertise attitude topic */
 	struct vehicle_attitude_s att;
 	memset(&att, 0, sizeof(att));
-	orb_advert_t att_pub = orb_advertise(ORB_ID(vehicle_attitude), &att);
+	orb_advert_t att_pub = orb_advertise(ORB_ID(vehicle_attitude), &att);//将实例广播出去，以供其他任务使用
 
 	/* one could wait for multiple topics with this technique, just using one here */
 	px4_pollfd_struct_t fds[] = {
-		{ .fd = sensor_sub_fd,   .events = POLLIN },
+		{ .fd = sensor_sub_fd,   .events = POLLIN }, //监听加速度的更新
 		/* there could be more file descriptors here, in the form like:
 		 * { .fd = other_sub_fd,   .events = POLLIN },
 		 */
@@ -107,14 +107,15 @@ int px4_simple_app_main(int argc, char *argv[])
 					 (double)accel.xyz[0],
 					 (double)accel.xyz[1],
 					 (double)accel.xyz[2]);
-
+				
+				//如果接受到数据，程序将vehicle_acceleration的主题数据复制到本地accel的结构体中并且打印出来
 				/* set att and publish this information for other apps
 				 the following does not have any meaning, it's just an example
 				*/
 				att.q[0] = accel.xyz[0];
 				att.q[1] = accel.xyz[1];
 				att.q[2] = accel.xyz[2];
-
+				//将加速度数据赋值给姿态结构体att的四元数部分，然后发布vehicle_attitude主题
 				orb_publish(ORB_ID(vehicle_attitude), att_pub, &att);
 			}
 
@@ -125,6 +126,6 @@ int px4_simple_app_main(int argc, char *argv[])
 	}
 
 	PX4_INFO("exiting");
-
+	//循环执行五次后退出
 	return 0;
 }

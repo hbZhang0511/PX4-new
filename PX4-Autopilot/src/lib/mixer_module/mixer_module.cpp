@@ -65,6 +65,8 @@ static const FunctionProvider all_function_providers[] = {
 	{OutputFunction::RC_Roll, OutputFunction::RC_AUXMax, &FunctionManualRC::allocate},
 	{OutputFunction::Gimbal_Roll, OutputFunction::Gimbal_Yaw, &FunctionGimbal::allocate},
 };
+//静态常量数组 all_function_providers，列举了所有支持的功能提供者。
+//每个功能提供者对应一个输出功能的范围（min_func 到 max_func）和一个构造函数，用于创建相应的功能提供者对象
 
 MixingOutput::MixingOutput(const char *param_prefix, uint8_t max_num_outputs, OutputModuleInterface &interface,
 			   SchedulingPolicy scheduling_policy, bool support_esc_calibration, bool ramp_up) :
@@ -97,6 +99,7 @@ MixingOutput::MixingOutput(const char *param_prefix, uint8_t max_num_outputs, Ou
 
 	_outputs_pub.advertise();
 }
+//初始化混控输出的各个参数和状态
 
 MixingOutput::~MixingOutput()
 {

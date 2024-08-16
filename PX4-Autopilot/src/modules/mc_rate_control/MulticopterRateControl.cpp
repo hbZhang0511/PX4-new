@@ -108,21 +108,21 @@ MulticopterRateControl::Run()
 		exit_and_cleanup();
 		return;
 	}
-
+    
 	perf_begin(_loop_perf);
 
-	// Check if parameters have changed
+	// Check if parameters have changed 检查参数是否更新
 	if (_parameter_update_sub.updated()) {
 		// clear update
 		parameter_update_s param_update;
-		_parameter_update_sub.copy(&param_update);
+		_parameter_update_sub.copy(&param_update); //从订阅的主题中复制最新的参数更新
 
 		updateParams();
 		parameters_updated();
 	}
 
 	/* run controller on gyro changes 从传感器更新角速度数据*/
-	vehicle_angular_velocity_s angular_velocity;
+	vehicle_angular_velocity_s angular_velocity; //存储角速度数据
 
 	if (_vehicle_angular_velocity_sub.update(&angular_velocity)) {
 
@@ -132,14 +132,14 @@ MulticopterRateControl::Run()
 		const float dt = math::constrain(((now - _last_run) * 1e-6f), 0.000125f, 0.02f);
 		_last_run = now;
 
-		const Vector3f rates{angular_velocity.xyz};
-		const Vector3f angular_accel{angular_velocity.xyz_derivative};
+		const Vector3f rates{angular_velocity.xyz}; //获取当前角速度的三轴数据
+		const Vector3f angular_accel{angular_velocity.xyz_derivative}; //获取当前角加速度的三轴数据
 
 		// 输出实际的角速度
         //PX4_INFO("Actual rates: Roll: %.3f, Pitch: %.3f, Yaw: %.3f", (double)rates(0), (double)rates(1), (double)rates(2));
 
 		/* check for updates in other topics */
-		_vehicle_control_mode_sub.update(&_vehicle_control_mode);
+		_vehicle_control_mode_sub.update(&_vehicle_control_mode); //更新控制模式
 
 		if (_vehicle_land_detected_sub.updated()) {
 			vehicle_land_detected_s vehicle_land_detected;
@@ -153,22 +153,22 @@ MulticopterRateControl::Run()
 		_vehicle_status_sub.update(&_vehicle_status);
 
 		// use rates setpoint topic
-		vehicle_rates_setpoint_s vehicle_rates_setpoint{};
+		vehicle_rates_setpoint_s vehicle_rates_setpoint{}; //存储速率设定值sp 只有三轴和thrust
 
 		if (_vehicle_control_mode.flag_control_manual_enabled && !_vehicle_control_mode.flag_control_attitude_enabled) {
 			// generate the rate setpoint from sticks
 			manual_control_setpoint_s manual_control_setpoint;
-
+			//更新手动控制设定值
 			if (_manual_control_setpoint_sub.update(&manual_control_setpoint)) {
-				// manual rates control - ACRO mode
+				// manual rates control - ACRO mode 使用superexpo函数对输入进行非线性处理
 				const Vector3f man_rate_sp{
 					math::superexpo(manual_control_setpoint.roll, _param_mc_acro_expo.get(), _param_mc_acro_supexpo.get()),
 					math::superexpo(-manual_control_setpoint.pitch, _param_mc_acro_expo.get(), _param_mc_acro_supexpo.get()),
 					math::superexpo(manual_control_setpoint.yaw, _param_mc_acro_expo_y.get(), _param_mc_acro_supexpoy.get())};
-
-				_rates_setpoint = man_rate_sp.emult(_acro_rate_max);
+					
+				_rates_setpoint = man_rate_sp.emult(_acro_rate_max); //得到rate_sp
 				_thrust_setpoint(2) = -(manual_control_setpoint.throttle + 1.f) * .5f;
-				_thrust_setpoint(0) = _thrust_setpoint(1) = 0.f;
+				_thrust_setpoint(0) = _thrust_setpoint(1) = 0.f; //将推力的x y分量设置为0 只考虑z方向的推力
 
  				// 输出期望的角速度设定值
                 //PX4_INFO("Desired rates: Roll: %.3f, Pitch: %.3f, Yaw: %.3f", (double)_rates_setpoint(0), (double)_rates_setpoint(1), (double)_rates_setpoint(2));
@@ -180,14 +180,14 @@ MulticopterRateControl::Run()
 				_thrust_setpoint.copyTo(vehicle_rates_setpoint.thrust_body);
 				vehicle_rates_setpoint.timestamp = hrt_absolute_time();
 
-				_vehicle_rates_setpoint_pub.publish(vehicle_rates_setpoint);
+				_vehicle_rates_setpoint_pub.publish(vehicle_rates_setpoint); //发布ratesp
 			}
 
 		} else if (_vehicle_rates_setpoint_sub.update(&vehicle_rates_setpoint)) {
 			if (_vehicle_rates_setpoint_sub.copy(&vehicle_rates_setpoint)) {
 				_rates_setpoint(0) = PX4_ISFINITE(vehicle_rates_setpoint.roll)  ? vehicle_rates_setpoint.roll  : rates(0);
 				_rates_setpoint(1) = PX4_ISFINITE(vehicle_rates_setpoint.pitch) ? vehicle_rates_setpoint.pitch : rates(1);
-				_rates_setpoint(2) = PX4_ISFINITE(vehicle_rates_setpoint.yaw)   ? vehicle_rates_setpoint.yaw   : rates(2);
+				_rates_setpoint(2) = PX4_ISFINITE(vehicle_rates_setpoint.yaw)   ? vehicle_rates_setpoint.yaw   : rates(2); //检查这些分量是否有效
 				_thrust_setpoint = Vector3f(vehicle_rates_setpoint.thrust_body);
 			}
 		}
@@ -222,7 +222,7 @@ MulticopterRateControl::Run()
 				_rate_control.setSaturationStatus(saturation_positive, saturation_negative);
 			}
 
-			// run rate controller 根据当前的角速率和设定的角速率和角加速度计算出电机控制输入
+			// run rate controller 根据当前的角速率和设定的角速率和角加速度来更新速率控制器，并计算控制输出力矩
 			const Vector3f att_control = _rate_control.update(rates, _rates_setpoint, angular_accel, dt, _maybe_landed || _landed);
 
 			// 输出控制器输出的力矩
@@ -232,7 +232,7 @@ MulticopterRateControl::Run()
 			rate_ctrl_status_s rate_ctrl_status{};
 			_rate_control.getRateControlStatus(rate_ctrl_status);
 			rate_ctrl_status.timestamp = hrt_absolute_time();
-			_controller_status_pub.publish(rate_ctrl_status);
+			_controller_status_pub.publish(rate_ctrl_status); //发布控制器状态
 
 			// publish thrust and torque setpoints
 			vehicle_thrust_setpoint_s vehicle_thrust_setpoint{};
@@ -241,7 +241,7 @@ MulticopterRateControl::Run()
 			_thrust_setpoint.copyTo(vehicle_thrust_setpoint.xyz);
 			vehicle_torque_setpoint.xyz[0] = PX4_ISFINITE(att_control(0)) ? att_control(0) : 0.f;
 			vehicle_torque_setpoint.xyz[1] = PX4_ISFINITE(att_control(1)) ? att_control(1) : 0.f;
-			vehicle_torque_setpoint.xyz[2] = PX4_ISFINITE(att_control(2)) ? att_control(2) : 0.f;
+			vehicle_torque_setpoint.xyz[2] = PX4_ISFINITE(att_control(2)) ? att_control(2) : 0.f;//检查这些力矩是否有效
 
 			// scale setpoints by battery status if enabled
 			if (_param_mc_bat_scale_en.get()) {
@@ -255,21 +255,21 @@ MulticopterRateControl::Run()
 
 				if (_battery_status_scale > 0.f) {
 					for (int i = 0; i < 3; i++) {
-						vehicle_thrust_setpoint.xyz[i] = math::constrain(vehicle_thrust_setpoint.xyz[i] * _battery_status_scale, -1.f, 1.f);
-						vehicle_torque_setpoint.xyz[i] = math::constrain(vehicle_torque_setpoint.xyz[i] * _battery_status_scale, -1.f, 1.f);
+						vehicle_thrust_setpoint.xyz[i] = math::constrain(vehicle_thrust_setpoint.xyz[i] * _battery_status_scale, -1.f, 1.f); //根据电池缩放比例调整推力设定值
+						vehicle_torque_setpoint.xyz[i] = math::constrain(vehicle_torque_setpoint.xyz[i] * _battery_status_scale, -1.f, 1.f); //根据电池缩放比例调整力矩设定值
 					}
 				}
 			}
 
 			vehicle_thrust_setpoint.timestamp_sample = angular_velocity.timestamp_sample;
 			vehicle_thrust_setpoint.timestamp = hrt_absolute_time();
-			_vehicle_thrust_setpoint_pub.publish(vehicle_thrust_setpoint);
+			_vehicle_thrust_setpoint_pub.publish(vehicle_thrust_setpoint);//发布推力设定值
 
 			vehicle_torque_setpoint.timestamp_sample = angular_velocity.timestamp_sample;
 			vehicle_torque_setpoint.timestamp = hrt_absolute_time();
-			_vehicle_torque_setpoint_pub.publish(vehicle_torque_setpoint);
+			_vehicle_torque_setpoint_pub.publish(vehicle_torque_setpoint);//发布力矩设定值
 
-			updateActuatorControlsStatus(vehicle_torque_setpoint, dt);
+			updateActuatorControlsStatus(vehicle_torque_setpoint, dt); //更新执行器控制状态
 
 		}
 	}

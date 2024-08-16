@@ -79,3 +79,5 @@ mc_pos_control start
 # Start Multicopter Land Detector.
 #
 land_detector start multicopter
+
+# 启动以上模块，就会去执行对应模块的入口函数，完成启动

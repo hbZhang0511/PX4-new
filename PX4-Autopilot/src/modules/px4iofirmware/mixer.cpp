@@ -82,10 +82,10 @@ enum mixer_source {
 };
 
 void
-mixer_tick()
+mixer_tick()   //混控的主逻辑设置
 {
 	/* check that we are receiving fresh data from the FMU */
-	irqstate_t irq_flags = enter_critical_section();
+	irqstate_t irq_flags = enter_critical_section(); //进入关键区
 	const hrt_abstime fmu_data_received_time = system_state.fmu_data_received_time;
 	leave_critical_section(irq_flags);
 
@@ -144,7 +144,7 @@ mixer_tick()
 				    ));
 
 	/* we enable PWM output always on the IO side if FMU is up and running
-	 * as zero-outputs can be controlled by FMU by sending a 0 PWM command
+	 * as zero-outputs can be controlled by FMU by sending a 0 PWM command 发送0pwm命令控制0输出
 	 */
 	should_always_enable_pwm = ((r_status_flags & PX4IO_P_STATUS_FLAGS_INIT_OK)
 				    && (r_status_flags & PX4IO_P_STATUS_FLAGS_FMU_OK));
@@ -214,7 +214,7 @@ mixer_tick()
 		atomic_modify_clear(&r_status_flags, (PX4IO_P_STATUS_FLAGS_OUTPUTS_ARMED));
 		isr_debug(5, "> PWM disabled");
 	}
-
+	
 	if (mixer_servos_armed
 	    && (should_arm || should_arm_nothrottle || (source == MIX_FAILSAFE))
 	    && !(r_setup_arming & PX4IO_P_SETUP_ARMING_LOCKDOWN)) {

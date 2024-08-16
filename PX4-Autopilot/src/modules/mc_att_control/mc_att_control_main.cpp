@@ -58,7 +58,7 @@ MulticopterAttitudeControl::MulticopterAttitudeControl(bool vtol) :
 	WorkItem(MODULE_NAME, px4::wq_configurations::nav_and_controllers),
 	_vehicle_attitude_setpoint_pub(vtol ? ORB_ID(mc_virtual_attitude_setpoint) : ORB_ID(vehicle_attitude_setpoint)),
 	_loop_perf(perf_alloc(PC_ELAPSED, MODULE_NAME": cycle")),
-	_vtol(vtol)
+	_vtol(vtol) //存储是否为vtol
 {
 
 	parameters_updated();
@@ -79,6 +79,7 @@ MulticopterAttitudeControl::init()
 
 	return true;
 }
+//注册了回调函数
 
 void
 MulticopterAttitudeControl::parameters_updated()
@@ -94,6 +95,8 @@ MulticopterAttitudeControl::parameters_updated()
 
 	_man_tilt_max = math::radians(_param_mpc_man_tilt_max.get());
 }
+//更新姿态控制器的参数，例如滚转、俯仰和偏航的kp，以及角速度的限制
+//_attitude_control是姿态控制器类的实例
 
 float
 MulticopterAttitudeControl::throttle_curve(float throttle_stick_input)
@@ -107,8 +110,9 @@ MulticopterAttitudeControl::throttle_curve(float throttle_stick_input)
 		return math::interpolateN(throttle_stick_input, {_param_mpc_manthr_min.get(), _param_mpc_thr_hover.get(), _param_mpc_thr_max.get()});
 	}
 }
+//油门曲线函数throttle_curve
+//根据油门曲线参数，调整油门杆输入的映射方式，throttle_stick_input是范围0-1之间的油门输入值
 
-//生成姿态角指令
 void
 MulticopterAttitudeControl::generate_attitude_setpoint(const Quatf &q, float dt, bool reset_yaw_sp)
 {
@@ -116,7 +120,7 @@ MulticopterAttitudeControl::generate_attitude_setpoint(const Quatf &q, float dt,
 	const float yaw = Eulerf(q).psi();
 
 	attitude_setpoint.yaw_sp_move_rate = _manual_control_setpoint.yaw * math::radians(_param_mpc_man_y_max.get());
-	//使用手动控制输入和最大偏航速率参数来计算偏航角设定速率
+	//使用手动控制输入和最大偏航速率参数来计算偏航角sp
 
 	// Avoid accumulating absolute yaw error with arming stick gesture in case heading_good_for_control stays true
 	if ((_manual_control_setpoint.throttle < -.9f) && (_param_mc_airmode.get() != 2)) {
@@ -162,7 +166,7 @@ MulticopterAttitudeControl::generate_attitude_setpoint(const Quatf &q, float dt,
 	//   yaw = atan(-2 * sin(b) * cos(b) * sin^2(a/2) / (1 - 2 * cos^2(b) * sin^2(a/2))).
 	//计算偏航的四元数
 	const Quatf q_sp_yaw(cosf(_man_yaw_sp / 2.f), 0.f, 0.f, sinf(_man_yaw_sp / 2.f));
-
+	//如果是vtol
 	if (_vtol) {
 		// Modify the setpoints for roll and pitch such that they reflect the user's intention even
 		// if a large yaw error(yaw_sp - yaw) is present. In the presence of a yaw error constructing
@@ -175,7 +179,7 @@ MulticopterAttitudeControl::generate_attitude_setpoint(const Quatf &q, float dt,
 	// Align the desired tilt with the yaw setpoint
 	Quatf q_sp = q_sp_yaw * q_sp_rp; //最终四元数
 
-	q_sp.copyTo(attitude_setpoint.q_d);
+	q_sp.copyTo(attitude_setpoint.q_d);//复制到attitude_setpoint.q_d
 
 	// Transform to euler angles for logging only
 	const Eulerf euler_sp(q_sp); //转换成欧拉角
@@ -183,7 +187,7 @@ MulticopterAttitudeControl::generate_attitude_setpoint(const Quatf &q, float dt,
 	attitude_setpoint.pitch_body = euler_sp(1);
 	attitude_setpoint.yaw_body = euler_sp(2);
 
-	attitude_setpoint.thrust_body[2] = -throttle_curve((_manual_control_setpoint.throttle + 1.f) * .5f);
+	attitude_setpoint.thrust_body[2] = -throttle_curve((_manual_control_setpoint.throttle + 1.f) * .5f);//计算推力设定值
 	attitude_setpoint.timestamp = hrt_absolute_time();
 
 	_vehicle_attitude_setpoint_pub.publish(attitude_setpoint);
@@ -347,7 +351,7 @@ int MulticopterAttitudeControl::task_spawn(int argc, char *argv[])
 			vtol = true;
 		}
 	}
-
+	//任务生成函数，创建MulticopterAttitudeControl的实例 初始化
 	MulticopterAttitudeControl *instance = new MulticopterAttitudeControl(vtol);
 
 	if (instance) {

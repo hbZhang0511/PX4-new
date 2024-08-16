@@ -119,9 +119,17 @@ private:
 	matrix::Vector3f _gain_ff; ///< direct rate to torque feed forward gain only useful for helicopters
 
 	// States
-	matrix::Vector3f _rate_int; ///< integral term of the rate controller
+	matrix::Vector3f _rate_int; ///< integral term of the rate controller 积分项的累积
 
 	// Feedback from control allocation
 	matrix::Vector<bool, 3> _control_allocator_saturation_negative;
 	matrix::Vector<bool, 3> _control_allocator_saturation_positive;
+
+	// INDI 控制变量
+	// matrix::Vector4f _last_delta_w = {0.0f, 0.0f, 0.0f, 0.0f}; ///< 上一时刻电机转速增量
+	// matrix::Vector4f _last_w = {0.0f, 0.0f, 0.0f, 0.0f};       ///< 上一时刻电机转速
+
+	//INDI torque 控制变量
+	// matrix::Vector3f _last_torque = {0.0f, 0.0f, 0.0f}; //上一时刻力矩增量
 };
+

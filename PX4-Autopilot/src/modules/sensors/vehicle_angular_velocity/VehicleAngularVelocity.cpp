@@ -46,10 +46,10 @@ VehicleAngularVelocity::VehicleAngularVelocity() :
 	ModuleParams(nullptr),
 	ScheduledWorkItem(MODULE_NAME, px4::wq_configurations::rate_ctrl)
 {
-	_vehicle_angular_velocity_pub.advertise();
+	_vehicle_angular_velocity_pub.advertise(); //发布话题
 }
 
-VehicleAngularVelocity::~VehicleAngularVelocity()
+VehicleAngularVelocity::~VehicleAngularVelocity() //析构函数
 {
 	Stop();
 
@@ -68,6 +68,7 @@ VehicleAngularVelocity::~VehicleAngularVelocity()
 #endif // CONSTRAINED_FLASH
 }
 
+//启动模块
 bool VehicleAngularVelocity::Start()
 {
 	// force initial updates
@@ -85,7 +86,7 @@ bool VehicleAngularVelocity::Start()
 
 	return true;
 }
-
+//停止模块
 void VehicleAngularVelocity::Stop()
 {
 	// clear all registered callbacks
@@ -98,8 +99,8 @@ void VehicleAngularVelocity::Stop()
 
 bool VehicleAngularVelocity::UpdateSampleRate()
 {
-	float sample_rate_hz = NAN;
-	float publish_rate_hz = NAN;
+	float sample_rate_hz = NAN; //存储采样率
+	float publish_rate_hz = NAN;//存储发布率
 
 	for (uint8_t i = 0; i < MAX_SENSOR_COUNT; i++) {
 		uORB::SubscriptionData<vehicle_imu_status_s> imu_status{ORB_ID(vehicle_imu_status), i};
@@ -158,7 +159,7 @@ bool VehicleAngularVelocity::UpdateSampleRate()
 
 	return PX4_ISFINITE(_filter_sample_rate_hz) && (_filter_sample_rate_hz > 0);
 }
-
+//重置滤波器
 void VehicleAngularVelocity::ResetFilters(const hrt_abstime &time_now_us)
 {
 	if ((_filter_sample_rate_hz > 0) && PX4_ISFINITE(_filter_sample_rate_hz)) {
@@ -767,18 +768,19 @@ float VehicleAngularVelocity::FilterAngularVelocity(int axis, float data[], int 
 	return data[N - 1];
 }
 
-float VehicleAngularVelocity::FilterAngularAcceleration(int axis, float inverse_dt_s, float data[], int N)
+//计算和过滤传感器中的角加速度 对角速度进行数值微分得到角加速度 并且用低通滤波器减少噪声
+float VehicleAngularVelocity::FilterAngularAcceleration(int axis, float inverse_dt_s, float data[], int N) //0.1.2轴对应xyz轴 采样时间间隔的倒数用于计算角加速度 floatdate是角速度的数组数据
 {
 	// angular acceleration: Differentiate & apply specific angular acceleration (D-term) low-pass (IMU_DGYRO_CUTOFF)
 	float angular_acceleration_filtered = 0.f;
-
+	
 	for (int n = 0; n < N; n++) {
-		const float angular_acceleration = (data[n] - _angular_velocity_raw_prev(axis)) * inverse_dt_s;
-		angular_acceleration_filtered = _lp_filter_acceleration[axis].update(angular_acceleration);
+		const float angular_acceleration = (data[n] - _angular_velocity_raw_prev(axis)) * inverse_dt_s;//计算角加速度
+		angular_acceleration_filtered = _lp_filter_acceleration[axis].update(angular_acceleration);//过滤角加速度
 		_angular_velocity_raw_prev(axis) = data[n];
 	}
 
-	return angular_acceleration_filtered;
+	return angular_acceleration_filtered;  //低通滤波后的角加速度值
 }
 
 void VehicleAngularVelocity::Run()
@@ -931,7 +933,9 @@ bool VehicleAngularVelocity::CalibrateAndPublish(const hrt_abstime &timestamp_sa
 
 		angular_velocity.timestamp = hrt_absolute_time();
 		_vehicle_angular_velocity_pub.publish(angular_velocity);
-
+		//经过校正的angular_velocity和angular_acceleration被存储到vehicle_angular_velocity_s消息的xyz和xyz_derivative字段中
+		//然后通过vehicle_angular_velocity_pub发布
+		
 		// shift last publish time forward, but don't let it get further behind than the interval
 		_last_publish = math::constrain(_last_publish + _publish_interval_min_us,
 						timestamp_sample - _publish_interval_min_us, timestamp_sample);
